@@ -2,6 +2,7 @@ package no.digdir.accessrequestapi.controller
 
 import no.digdir.accessrequestapi.client.FelleskatalogClient
 import no.digdir.accessrequestapi.configuration.FdkUrls
+import no.digdir.accessrequestapi.model.DatasetLanguage
 import no.digdir.accessrequestapi.model.Handlekurv
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -24,8 +25,9 @@ class HandlekurvController(
     @ExceptionHandler(WebClientResponseException.NotFound::class)
     fun handleNotFound() {}
 
-    @GetMapping("/{type}/{id}")
+    @GetMapping("/{language}/{type}/{id}")
     fun getHandlekurv(
+        @PathVariable language: DatasetLanguage,
         @PathVariable type: String,
         @PathVariable id: UUID,
     ): ResponseEntity<Handlekurv> {
@@ -33,6 +35,6 @@ class HandlekurvController(
             felleskatalogClient.getMetadata(type, id)
                 ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity.ok(metadata.toHandlekurv(resourceId = "${fdkUrls.frontend}/$type/$id"))
+        return ResponseEntity.ok(metadata.toHandlekurv(resourceId = "${fdkUrls.frontend}/$type/$id", language = language))
     }
 }
