@@ -10,6 +10,7 @@
     <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
         <target>System.out</target>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <jsonGeneratorDecorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
             <providers>
                 <timestamp>
                     <fieldName>timestamp</fieldName>
