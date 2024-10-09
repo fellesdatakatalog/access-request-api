@@ -16,6 +16,8 @@ jobs:
       java_version: '21'
 #      coverage_file_path: ./target/site/jacoco/jacoco.xml
       environment: staging
+      build_env: true
+
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GCP_SA_DIGDIR_FDK_GCR_KEY: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}

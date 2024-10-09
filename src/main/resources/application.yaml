@@ -18,8 +18,8 @@ management:
         include: health, info
 
 url:
-  fellesdatakatalog.api: https://resource.api.fellesdatakatalog.digdir.no
-  fellesdatakatalog.frontend: https://data.norge.no
+  fellesdatakatalog.api: ${RESOURCE_SERVICE_URI}
+  fellesdatakatalog.frontend: ${FDK_URI}
 
 ---
 spring:
