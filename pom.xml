@@ -39,6 +39,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -98,7 +102,6 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
