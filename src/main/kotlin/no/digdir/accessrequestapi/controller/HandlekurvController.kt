@@ -1,8 +1,8 @@
 package no.digdir.accessrequestapi.controller
 
 import no.digdir.accessrequestapi.client.FelleskatalogClient
+import no.digdir.accessrequestapi.configuration.FdkUrls
 import no.digdir.accessrequestapi.model.Handlekurv
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -17,8 +17,7 @@ import java.util.UUID
 @RestController
 @RequestMapping(value = ["/handlekurv"], produces = ["application/json"])
 class HandlekurvController(
-    @Value("\${url.fellesdatakatalog.frontend}")
-    val fellesdatakatalogFrontendUrl: String,
+    val fdkUrls: FdkUrls,
     val felleskatalogClient: FelleskatalogClient,
 ) {
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Resource not found")
@@ -34,6 +33,6 @@ class HandlekurvController(
             felleskatalogClient.getMetadata(type, id)
                 ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity.ok(metadata.toHandlekurv(resourceId = "$fellesdatakatalogFrontendUrl/$type/$id"))
+        return ResponseEntity.ok(metadata.toHandlekurv(resourceId = "${fdkUrls.frontend}/$type/$id"))
     }
 }
