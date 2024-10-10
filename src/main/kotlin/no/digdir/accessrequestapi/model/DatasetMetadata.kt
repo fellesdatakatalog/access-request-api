@@ -1,6 +1,7 @@
 package no.digdir.accessrequestapi.model
 
 data class DatasetMetadata(
+    val accessRequestUrl: String?,
     val contactPoint: List<ContactPoint>,
     val title: LocalizedStrings,
     val publisher: Publisher,
