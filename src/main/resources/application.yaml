@@ -18,8 +18,11 @@ management:
         include: health, info
 
 url:
-  fellesdatakatalog.api: ${RESOURCE_SERVICE_URI}
-  fellesdatakatalog.frontend: ${FDK_URI}
+  fellesdatakatalog:
+    api: ${RESOURCE_SERVICE_URI}
+    frontend: ${FDK_URI}
+  kudaf:
+    soknadApi: https://frontend-soknad-api.paas2.uninett.no
 
 ---
 spring:
