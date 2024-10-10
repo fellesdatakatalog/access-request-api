@@ -1,5 +1,6 @@
 package no.digdir.accessrequestapi.controller
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.digdir.accessrequestapi.client.FelleskatalogClient
 import no.digdir.accessrequestapi.model.DatasetLanguage
 import no.digdir.accessrequestapi.model.DatasetMetadata
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import java.util.UUID
 
+@Tag(name = "DataDef resolver")
 @RestController
 @RequestMapping(value = ["/datadef-resolver"], produces = ["application/json"])
 class KudafResolverController(

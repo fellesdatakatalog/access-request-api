@@ -1,5 +1,6 @@
 package no.digdir.accessrequestapi.controller
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.digdir.accessrequestapi.client.FelleskatalogClient
 import no.digdir.accessrequestapi.client.KudafClient
 import no.digdir.accessrequestapi.configuration.FdkUrls
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import java.util.UUID
 
+@Tag(name = "Access request")
 @RestController
 @RequestMapping(value = ["/access-request"], produces = ["application/json"])
 class AccessRequestController(
