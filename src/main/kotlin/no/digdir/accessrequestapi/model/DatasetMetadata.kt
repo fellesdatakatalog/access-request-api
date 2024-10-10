@@ -36,15 +36,15 @@ data class DatasetMetadata(
         val code: AccessRight,
     )
 
-    fun toHandlekurv(
+    fun toShoppingCart(
         resourceId: String,
         language: DatasetLanguage,
-    ): Handlekurv =
-        Handlekurv(
+    ): ShoppingCart =
+        ShoppingCart(
             orgnr = publisher.id,
             hintIsPublic = accessRights?.code == AccessRight.PUBLIC,
             dataDef =
-                Handlekurv.DataDef(
+                ShoppingCart.DataDef(
                     identifier = identifier?.firstOrNull(),
                     resourceId = resourceId,
                     orgnr = publisher.id,

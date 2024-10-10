@@ -1,6 +1,6 @@
 package no.digdir.accessrequestapi.model
 
-data class Handlekurv(
+data class ShoppingCart(
     val orgnr: String,
     val language: DatasetLanguage,
     val hintIsPublic: Boolean,

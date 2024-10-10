@@ -3,7 +3,7 @@ package no.digdir.accessrequestapi.controller
 import no.digdir.accessrequestapi.client.FelleskatalogClient
 import no.digdir.accessrequestapi.configuration.FdkUrls
 import no.digdir.accessrequestapi.model.DatasetLanguage
-import no.digdir.accessrequestapi.model.Handlekurv
+import no.digdir.accessrequestapi.model.ShoppingCart
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -16,8 +16,8 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import java.util.UUID
 
 @RestController
-@RequestMapping(value = ["/handlekurv"], produces = ["application/json"])
-class HandlekurvController(
+@RequestMapping(value = ["/access-request"], produces = ["application/json"])
+class AccessRequestController(
     val fdkUrls: FdkUrls,
     val felleskatalogClient: FelleskatalogClient,
 ) {
@@ -26,15 +26,15 @@ class HandlekurvController(
     fun handleNotFound() {}
 
     @GetMapping("/{language}/{type}/{id}")
-    fun getHandlekurv(
+    fun getShoppingCart(
         @PathVariable language: DatasetLanguage,
         @PathVariable type: String,
         @PathVariable id: UUID,
-    ): ResponseEntity<Handlekurv> {
+    ): ResponseEntity<ShoppingCart> {
         val metadata =
             felleskatalogClient.getMetadata(type, id)
                 ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity.ok(metadata.toHandlekurv(resourceId = "${fdkUrls.frontend}/$type/$id", language = language))
+        return ResponseEntity.ok(metadata.toShoppingCart(resourceId = "${fdkUrls.frontend}/$type/$id", language = language))
     }
 }
