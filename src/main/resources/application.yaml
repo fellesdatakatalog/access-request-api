@@ -24,10 +24,6 @@ url:
   kudaf:
     soknadApi: https://frontend-soknad-api.paas2.uninett.no
 
-
-springdoc:
-  swagger-ui:
-    path: /
 ---
 spring:
   config.activate.on-profile: dev
