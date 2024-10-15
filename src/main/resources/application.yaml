@@ -24,6 +24,10 @@ url:
   kudaf:
     soknadApi: https://frontend-soknad-api.paas2.uninett.no
 
+application:
+  cors:
+    originPatterns: ${CORS_ORIGIN_PATTERNS}
+
 ---
 spring:
   config.activate.on-profile: dev
@@ -34,6 +38,10 @@ logging:
 url:
   fellesdatakatalog.api: https://resource.api.staging.fellesdatakatalog.digdir.no
   fellesdatakatalog.frontend: https://staging.fellesdatakatalog.digdir.no
+
+application:
+  cors:
+    originPatterns: localhost:3001
 
 ---
 spring:
