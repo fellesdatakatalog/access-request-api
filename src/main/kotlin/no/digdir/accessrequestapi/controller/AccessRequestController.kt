@@ -8,8 +8,8 @@ import no.digdir.accessrequestapi.model.DatasetLanguage
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
@@ -28,26 +28,19 @@ class AccessRequestController(
     @ExceptionHandler(WebClientResponseException.NotFound::class)
     fun handleNotFound() {}
 
-    @GetMapping("/{language}/{type}/{id}")
-    fun getApplicationUrl(
+    @PostMapping("/{language}/{type}/{id}")
+    fun createKudafApplication(
         @PathVariable language: DatasetLanguage,
         @PathVariable type: String,
         @PathVariable id: UUID,
     ): ResponseEntity<String> {
-        val metadata =
-            felleskatalogClient.getMetadata(type, id) ?: return ResponseEntity.notFound().build()
+        val metadata = felleskatalogClient.getMetadata(type, id) ?: return ResponseEntity.notFound().build()
 
-        return when (metadata.accessRequestUrl) {
-            null,
-            "soknad.kudaf.no",
-            -> {
-                val shoppingCart = metadata.toShoppingCart(resourceId = "${fdkUrls.frontend}/$type/$id", language = language)
-                val redirectUrl = kudafClient.getRedirectUrl(shoppingCart) ?: return ResponseEntity.notFound().build()
+        val shoppingCart =
+            metadata.toShoppingCart(resourceId = "${fdkUrls.frontend}/$type/$id", language = language)
 
-                ResponseEntity.ok(redirectUrl)
-            }
+        val redirectUrl = kudafClient.getRedirectUrl(shoppingCart) ?: return ResponseEntity.notFound().build()
 
-            else -> ResponseEntity.ok(metadata.accessRequestUrl)
-        }
+        return ResponseEntity.ok(redirectUrl)
     }
 }
