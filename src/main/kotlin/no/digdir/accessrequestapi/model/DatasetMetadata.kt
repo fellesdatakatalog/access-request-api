@@ -33,7 +33,7 @@ data class DatasetMetadata(
     )
 
     data class AccessRights(
-        val code: AccessRight,
+        val code: AccessRight?,
     )
 
     fun toShoppingCart(
