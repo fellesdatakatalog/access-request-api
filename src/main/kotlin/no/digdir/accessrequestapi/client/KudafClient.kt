@@ -5,6 +5,8 @@ import no.digdir.accessrequestapi.model.ShoppingCart
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
+import reactor.util.retry.Retry
+import java.time.Duration
 
 @Component
 class KudafClient(
@@ -19,7 +21,9 @@ class KudafClient(
             .bodyValue(cart)
             .retrieve()
             .bodyToMono<KudafAccessRequestResponse>()
-            .block()
+            .retryWhen(
+                Retry.backoff(3, Duration.ofMillis(200)),
+            ).block()
             ?.redirectUrl
 }
 
