@@ -18,8 +18,15 @@ management:
         include: health, info
 
 url:
-  fellesdatakatalog.api: ${RESOURCE_SERVICE_URI}
-  fellesdatakatalog.frontend: ${FDK_URI}
+  fellesdatakatalog:
+    api: ${RESOURCE_SERVICE_URI}
+    frontend: ${FDK_URI}
+  kudaf:
+    soknadApi: https://frontend-soknad-api.paas2.uninett.no
+
+application:
+  cors:
+    originPatterns: ${CORS_ORIGIN_PATTERNS}
 
 ---
 spring:
@@ -31,6 +38,10 @@ logging:
 url:
   fellesdatakatalog.api: https://resource.api.staging.fellesdatakatalog.digdir.no
   fellesdatakatalog.frontend: https://staging.fellesdatakatalog.digdir.no
+
+application:
+  cors:
+    originPatterns: localhost:3001
 
 ---
 spring:
