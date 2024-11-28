@@ -22,7 +22,7 @@ class KudafClient(
             .retrieve()
             .bodyToMono<KudafAccessRequestResponse>()
             .retryWhen(
-                Retry.backoff(3, Duration.ofMillis(200)),
+                Retry.backoff(3, Duration.ofSeconds(2)),
             ).block()
             ?.redirectUrl
 }
