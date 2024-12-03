@@ -2,6 +2,7 @@ package no.digdir.accessrequestapi.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.digdir.accessrequestapi.client.FelleskatalogClient
+import no.digdir.accessrequestapi.configuration.FdkUrls
 import no.digdir.accessrequestapi.model.DatasetLanguage
 import no.digdir.accessrequestapi.model.DatasetMetadata
 import no.digdir.accessrequestapi.model.ShoppingCart
@@ -22,6 +23,7 @@ import java.util.UUID
 @RequestMapping(value = ["/datadef-resolver"], produces = ["application/json"])
 class KudafResolverController(
     val felleskatalogClient: FelleskatalogClient,
+    val fdkUrls: FdkUrls,
 ) {
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Resource not found")
     @ExceptionHandler(WebClientResponseException.NotFound::class)
@@ -46,16 +48,24 @@ class KudafResolverController(
         val metadata =
             felleskatalogClient.getMetadata(resourceType, resourceId) ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity.ok(ResolveDataDefResponse(metadata, language))
+        return ResponseEntity.ok(
+            ResolveDataDefResponse(
+                metadata = metadata,
+                language = language,
+                urlToResource = "${fdkUrls.frontend}/$resourceType/$resourceId",
+            ),
+        )
     }
 }
 
 data class ResolveDataDefResponse(
     val title: String?,
     val description: String?,
+    val urlToResource: String?,
 ) {
-    constructor(metadata: DatasetMetadata, language: DatasetLanguage) : this(
+    constructor(metadata: DatasetMetadata, language: DatasetLanguage, urlToResource: String?) : this(
         title = metadata.title.get(language),
         description = metadata.description?.get(language),
+        urlToResource = urlToResource,
     )
 }
