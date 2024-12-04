@@ -14,17 +14,28 @@ class KudafClient(
 ) {
     val webClient = WebClient.create(kudafUrls.soknadApi)
 
-    fun getRedirectUrl(cart: ShoppingCart): String? =
+    fun warmUp() {
         webClient
+            .get()
+            .uri("/health")
+            .retrieve()
+            .toBodilessEntity()
+            .retryWhen(
+                Retry.backoff(3, Duration.ofSeconds(2)),
+            ).block()
+    }
+
+    fun getRedirectUrl(cart: ShoppingCart): String? {
+        warmUp()
+        return webClient
             .post()
             .uri("/cart")
             .bodyValue(cart)
             .retrieve()
             .bodyToMono<KudafAccessRequestResponse>()
-            .retryWhen(
-                Retry.backoff(3, Duration.ofSeconds(2)),
-            ).block()
+            .block()
             ?.redirectUrl
+    }
 }
 
 data class KudafAccessRequestResponse(
