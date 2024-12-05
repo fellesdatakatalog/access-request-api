@@ -12,19 +12,41 @@ import java.time.Duration
 class KudafClient(
     kudafUrls: KudafUrls,
 ) {
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
     val webClient = WebClient.create(kudafUrls.soknadApi)
 
-    fun getRedirectUrl(cart: ShoppingCart): String? =
+    fun warmUp() {
+        logger.info("Starting warm-up by checking the health endpoint.")
         webClient
-            .post()
-            .uri("/cart")
-            .bodyValue(cart)
+            .get()
+            .uri("/health")
             .retrieve()
-            .bodyToMono<KudafAccessRequestResponse>()
+            .toBodilessEntity()
             .retryWhen(
-                Retry.backoff(3, Duration.ofMillis(200)),
+                Retry
+                    .backoff(3, Duration.ofSeconds(2))
+                    .doBeforeRetry { logger.info("Retrying request to /health. Attempt: ${it.totalRetries() + 1}") },
             ).block()
-            ?.redirectUrl
+        logger.info("Warm-up completed.")
+    }
+
+    fun getRedirectUrl(cart: ShoppingCart): String? {
+        logger.info("Fetching redirect URL for cart: $cart")
+        warmUp()
+
+        val redirectUrl =
+            webClient
+                .post()
+                .uri("/cart")
+                .bodyValue(cart)
+                .retrieve()
+                .bodyToMono<KudafAccessRequestResponse>()
+                .block()
+                ?.redirectUrl
+
+        logger.info("Redirect URL: $redirectUrl")
+        return redirectUrl
+    }
 }
 
 data class KudafAccessRequestResponse(

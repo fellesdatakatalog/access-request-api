@@ -24,9 +24,13 @@ class AccessRequestController(
     val felleskatalogClient: FelleskatalogClient,
     val kudafClient: KudafClient,
 ) {
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Resource not found")
     @ExceptionHandler(WebClientResponseException.NotFound::class)
-    fun handleNotFound() {}
+    fun handleNotFound(exception: WebClientResponseException) {
+        logger.info("Resource not found", exception)
+    }
 
     @PostMapping("/{language}/{type}/{id}")
     fun createKudafApplication(
@@ -34,6 +38,8 @@ class AccessRequestController(
         @PathVariable type: String,
         @PathVariable id: UUID,
     ): ResponseEntity<String> {
+        logger.info("Received request to create Kudaf application for type: $type, id: $id, language: $language")
+
         val metadata = felleskatalogClient.getMetadata(type, id) ?: return ResponseEntity.notFound().build()
 
         val shoppingCart =

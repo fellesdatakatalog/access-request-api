@@ -11,16 +11,21 @@ import java.util.UUID
 class FelleskatalogClient(
     fdkUrls: FdkUrls,
 ) {
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+
     val webClient = WebClient.create(fdkUrls.api)
 
     fun getMetadata(
         type: String,
         id: UUID,
-    ): DatasetMetadata? =
-        webClient
+    ): DatasetMetadata? {
+        logger.info("Fetching metadata for type: $type and id: $id from Felleskatalog.")
+
+        return webClient
             .get()
             .uri("/$type/$id")
             .retrieve()
             .bodyToMono<DatasetMetadata>()
             .block()
+    }
 }
