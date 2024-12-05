@@ -23,21 +23,29 @@ class KudafClient(
             .retrieve()
             .toBodilessEntity()
             .retryWhen(
-                Retry.backoff(3, Duration.ofSeconds(2)),
+                Retry
+                    .backoff(3, Duration.ofSeconds(2))
+                    .doBeforeRetry { logger.info("Retrying request to /health. Attempt: ${it.totalRetries() + 1}") },
             ).block()
+        logger.info("Warm-up completed.")
     }
 
     fun getRedirectUrl(cart: ShoppingCart): String? {
         logger.info("Fetching redirect URL for cart: $cart")
         warmUp()
-        return webClient
-            .post()
-            .uri("/cart")
-            .bodyValue(cart)
-            .retrieve()
-            .bodyToMono<KudafAccessRequestResponse>()
-            .block()
-            ?.redirectUrl
+
+        val redirectUrl =
+            webClient
+                .post()
+                .uri("/cart")
+                .bodyValue(cart)
+                .retrieve()
+                .bodyToMono<KudafAccessRequestResponse>()
+                .block()
+                ?.redirectUrl
+
+        logger.info("Redirect URL: $redirectUrl")
+        return redirectUrl
     }
 }
 
