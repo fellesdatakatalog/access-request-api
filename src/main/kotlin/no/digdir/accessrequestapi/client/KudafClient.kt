@@ -12,9 +12,11 @@ import java.time.Duration
 class KudafClient(
     kudafUrls: KudafUrls,
 ) {
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
     val webClient = WebClient.create(kudafUrls.soknadApi)
 
     fun warmUp() {
+        logger.info("Starting warm-up by checking the health endpoint.")
         webClient
             .get()
             .uri("/health")
@@ -26,6 +28,7 @@ class KudafClient(
     }
 
     fun getRedirectUrl(cart: ShoppingCart): String? {
+        logger.info("Fetching redirect URL for cart: $cart")
         warmUp()
         return webClient
             .post()
