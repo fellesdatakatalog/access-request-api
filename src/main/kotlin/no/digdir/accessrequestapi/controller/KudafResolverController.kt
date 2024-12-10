@@ -25,15 +25,21 @@ class KudafResolverController(
     val felleskatalogClient: FelleskatalogClient,
     val fdkUrls: FdkUrls,
 ) {
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Resource not found")
     @ExceptionHandler(WebClientResponseException.NotFound::class)
-    fun handleNotFound() {}
+    fun handleNotFound(exception: WebClientResponseException) {
+        logger.info("Resource not found", exception)
+    }
 
     @PostMapping("/{language}")
     fun resolveDataDef(
         @PathVariable language: DatasetLanguage,
         @RequestBody dataDef: ShoppingCart.DataDef,
     ): ResponseEntity<ResolveDataDefResponse> {
+        logger.info("Received request to resolve data definition for resource: $dataDef")
+
         val uriReversed =
             java.net
                 .URI(dataDef.resourceId)
