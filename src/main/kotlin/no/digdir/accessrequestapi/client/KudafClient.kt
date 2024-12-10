@@ -15,24 +15,8 @@ class KudafClient(
     val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
     val webClient = WebClient.create(kudafUrls.soknadApi)
 
-    fun warmUp() {
-        logger.info("Starting warm-up by checking the health endpoint.")
-        webClient
-            .get()
-            .uri("/health")
-            .retrieve()
-            .toBodilessEntity()
-            .retryWhen(
-                Retry
-                    .backoff(3, Duration.ofSeconds(2))
-                    .doBeforeRetry { logger.info("Retrying request to /health. Attempt: ${it.totalRetries() + 1}") },
-            ).block()
-        logger.info("Warm-up completed.")
-    }
-
     fun getRedirectUrl(cart: ShoppingCart): String? {
         logger.info("Fetching redirect URL for cart: $cart")
-        warmUp()
 
         val redirectUrl =
             webClient
