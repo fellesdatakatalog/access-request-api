@@ -4,6 +4,7 @@ data class ShoppingCart(
     val orgnr: String,
     val language: DatasetLanguage,
     val hintIsPublic: Boolean,
+    val hintIsOrg: Boolean,
     val dataDef: DataDef,
 ) {
     val system: String = "datanorge"

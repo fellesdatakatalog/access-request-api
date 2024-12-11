@@ -1,5 +1,13 @@
 package no.digdir.accessrequestapi.model
 
+val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY = listOf(
+    // https://staging.fellesdatakatalog.digdir.no/data-services/ecdbd6d4-7026-3731-bd8e-2f15e26221a2
+    "ecdbd6d4-7026-3731-bd8e-2f15e26221a2",
+
+    // https://data.norge.no/data-services/031f7cea-4920-3cd4-8333-7f8992904aa5
+    "031f7cea-4920-3cd4-8333-7f8992904aa5"
+)
+
 data class DatasetMetadata(
     val accessRequestUrl: String?,
     val contactPoint: List<ContactPoint>,
@@ -44,6 +52,7 @@ data class DatasetMetadata(
         ShoppingCart(
             orgnr = publisher.id,
             hintIsPublic = accessRights?.code == AccessRight.PUBLIC,
+            hintIsOrg = resourceId in HARD_CODED_RESOURCE_ID_IS_ORG_ONLY,
             dataDef =
                 ShoppingCart.DataDef(
                     identifier = identifier?.firstOrNull(),
