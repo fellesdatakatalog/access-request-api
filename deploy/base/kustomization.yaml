@@ -6,5 +6,5 @@ resources:
   - access-request-api-service.yaml
 images:
   - name: access-request-api
-    newName: eu.gcr.io/digdir-fdk-infra/access-request-api
+    newName: ghcr.io/fellesdatakatalog/access-request-api
     newTag: $(GIT_COMMIT_SHA)
