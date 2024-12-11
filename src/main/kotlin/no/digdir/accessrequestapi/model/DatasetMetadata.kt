@@ -1,5 +1,6 @@
 package no.digdir.accessrequestapi.model
 
+@Deprecated("Use the result of https://github.com/Informasjonsforvaltning/applicationdcat-ap-no/issues/2 when it is ready")
 val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY = listOf(
     // https://staging.fellesdatakatalog.digdir.no/data-services/ecdbd6d4-7026-3731-bd8e-2f15e26221a2
     "ecdbd6d4-7026-3731-bd8e-2f15e26221a2",
