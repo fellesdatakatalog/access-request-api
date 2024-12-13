@@ -68,10 +68,12 @@ data class ResolveDataDefResponse(
     val title: String?,
     val description: String?,
     val urlToResource: String?,
-) {
+    val hintIsPrePublicationData: Boolean,
+    ) {
     constructor(metadata: DatasetMetadata, language: DatasetLanguage, urlToResource: String?) : this(
         title = metadata.title.get(language),
         description = metadata.description?.get(language),
         urlToResource = urlToResource,
+        hintIsPrePublicationData = metadata.isDatasetWithoutDistribution(),
     )
 }

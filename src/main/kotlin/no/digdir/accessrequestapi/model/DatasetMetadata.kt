@@ -48,24 +48,23 @@ data class DatasetMetadata(
     fun toShoppingCart(
         resourceId: String,
         language: DatasetLanguage,
-    ): ShoppingCart {
-        val isDatasetWithoutDistribution = type == "datasets" && distribution.isNullOrEmpty()
-
-        return ShoppingCart(
+    ): ShoppingCart =
+        ShoppingCart(
             orgnr = publisher.id,
             hintIsPublic = accessRights?.code == AccessRight.PUBLIC,
             hintIsOrg = resourceId in HARD_CODED_RESOURCE_ID_IS_ORG_ONLY,
-            hintIsPrePublicationData = isDatasetWithoutDistribution,
+            hintIsPrePublicationData = isDatasetWithoutDistribution(),
             dataDef =
-            ShoppingCart.DataDef(
-                identifier = identifier?.firstOrNull(),
-                resourceId = resourceId,
-                orgnr = publisher.id,
-                resourceName = title.get(language) ?: "",
-            ),
+                ShoppingCart.DataDef(
+                    identifier = identifier?.firstOrNull(),
+                    resourceId = resourceId,
+                    orgnr = publisher.id,
+                    resourceName = title.get(language) ?: "",
+                ),
             language = language,
         )
-    }
+
+    fun isDatasetWithoutDistribution() = type == "datasets" && distribution.isNullOrEmpty()
 }
 
 enum class AccessRight {
