@@ -8,7 +8,7 @@ val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY = listOf(
 
 data class DatasetMetadata(
     val accessRequestUrl: String?,
-    val contactPoint: List<ContactPoint>,
+    val contactPoint: List<ContactPoint>?,
     val title: LocalizedStrings,
     val publisher: Publisher,
     val identifier: Array<String>?,
