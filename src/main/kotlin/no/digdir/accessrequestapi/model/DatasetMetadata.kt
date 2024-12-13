@@ -14,6 +14,8 @@ data class DatasetMetadata(
     val identifier: Array<String>?,
     val accessRights: AccessRights?,
     val description: LocalizedStrings?,
+    val distribution: List<Any>?,
+    val type: String,
 ) {
     data class ContactPoint(
         val email: String,
@@ -46,20 +48,24 @@ data class DatasetMetadata(
     fun toShoppingCart(
         resourceId: String,
         language: DatasetLanguage,
-    ): ShoppingCart =
-        ShoppingCart(
+    ): ShoppingCart {
+        val isDatasetWithoutDistribution = type == "datasets" && distribution.isNullOrEmpty()
+
+        return ShoppingCart(
             orgnr = publisher.id,
             hintIsPublic = accessRights?.code == AccessRight.PUBLIC,
             hintIsOrg = resourceId in HARD_CODED_RESOURCE_ID_IS_ORG_ONLY,
+            hintIsPrePublicationData = isDatasetWithoutDistribution,
             dataDef =
-                ShoppingCart.DataDef(
-                    identifier = identifier?.firstOrNull(),
-                    resourceId = resourceId,
-                    orgnr = publisher.id,
-                    resourceName = title.get(language) ?: "",
-                ),
+            ShoppingCart.DataDef(
+                identifier = identifier?.firstOrNull(),
+                resourceId = resourceId,
+                orgnr = publisher.id,
+                resourceName = title.get(language) ?: "",
+            ),
             language = language,
         )
+    }
 }
 
 enum class AccessRight {
