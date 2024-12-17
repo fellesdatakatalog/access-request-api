@@ -6,14 +6,16 @@ val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY = listOf(
     "https://data.norge.no/data-services/031f7cea-4920-3cd4-8333-7f8992904aa5"
 )
 
-data class DatasetMetadata(
+data class DataResourceMetadata(
     val accessRequestUrl: String?,
-    val contactPoint: List<ContactPoint>,
+    val contactPoint: List<ContactPoint>?,
     val title: LocalizedStrings,
     val publisher: Publisher,
     val identifier: Array<String>?,
     val accessRights: AccessRights?,
     val description: LocalizedStrings?,
+    val distribution: List<Any>?,
+    val type: String,
 ) {
     data class ContactPoint(
         val email: String,
@@ -51,6 +53,7 @@ data class DatasetMetadata(
             orgnr = publisher.id,
             hintIsPublic = accessRights?.code == AccessRight.PUBLIC,
             hintIsOrg = resourceId in HARD_CODED_RESOURCE_ID_IS_ORG_ONLY,
+            hintIsPrePublicationData = isDatasetWithoutDistribution(),
             dataDef =
                 ShoppingCart.DataDef(
                     identifier = identifier?.firstOrNull(),
@@ -60,6 +63,8 @@ data class DatasetMetadata(
                 ),
             language = language,
         )
+
+    fun isDatasetWithoutDistribution() = type == "datasets" && distribution.isNullOrEmpty()
 }
 
 enum class AccessRight {

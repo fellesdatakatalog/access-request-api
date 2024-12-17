@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.digdir.accessrequestapi.client.FelleskatalogClient
 import no.digdir.accessrequestapi.configuration.FdkUrls
 import no.digdir.accessrequestapi.model.DatasetLanguage
-import no.digdir.accessrequestapi.model.DatasetMetadata
+import no.digdir.accessrequestapi.model.DataResourceMetadata
 import no.digdir.accessrequestapi.model.ShoppingCart
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -68,10 +68,12 @@ data class ResolveDataDefResponse(
     val title: String?,
     val description: String?,
     val urlToResource: String?,
-) {
-    constructor(metadata: DatasetMetadata, language: DatasetLanguage, urlToResource: String?) : this(
+    val hintIsPrePublicationData: Boolean,
+    ) {
+    constructor(metadata: DataResourceMetadata, language: DatasetLanguage, urlToResource: String?) : this(
         title = metadata.title.get(language),
         description = metadata.description?.get(language),
         urlToResource = urlToResource,
+        hintIsPrePublicationData = metadata.isDatasetWithoutDistribution(),
     )
 }
