@@ -1,7 +1,7 @@
 package no.digdir.accessrequestapi.client
 
 import no.digdir.accessrequestapi.configuration.FdkUrls
-import no.digdir.accessrequestapi.model.DatasetMetadata
+import no.digdir.accessrequestapi.model.DataResourceMetadata
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
@@ -18,14 +18,14 @@ class FelleskatalogClient(
     fun getMetadata(
         type: String,
         id: UUID,
-    ): DatasetMetadata? {
+    ): DataResourceMetadata? {
         logger.info("Fetching metadata for type: $type and id: $id from Felleskatalog.")
 
         return webClient
             .get()
             .uri("/$type/$id")
             .retrieve()
-            .bodyToMono<DatasetMetadata>()
+            .bodyToMono<DataResourceMetadata>()
             .block()
     }
 }

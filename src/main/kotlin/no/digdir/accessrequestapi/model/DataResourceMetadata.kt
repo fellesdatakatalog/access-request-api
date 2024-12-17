@@ -6,7 +6,7 @@ val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY = listOf(
     "https://data.norge.no/data-services/031f7cea-4920-3cd4-8333-7f8992904aa5"
 )
 
-data class DatasetMetadata(
+data class DataResourceMetadata(
     val accessRequestUrl: String?,
     val contactPoint: List<ContactPoint>?,
     val title: LocalizedStrings,
