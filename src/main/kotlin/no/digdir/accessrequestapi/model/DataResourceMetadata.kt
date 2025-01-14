@@ -12,6 +12,7 @@ data class DataResourceMetadata(
     val title: LocalizedStrings,
     val publisher: Publisher,
     val identifier: Array<String>?,
+    val uri: String,
     val accessRights: AccessRights?,
     val description: LocalizedStrings?,
     val distribution: List<Any>?,
@@ -58,6 +59,7 @@ data class DataResourceMetadata(
                 ShoppingCart.DataDef(
                     identifier = identifier?.firstOrNull(),
                     resourceId = resourceId,
+                    uri = uri,
                     orgnr = publisher.id,
                     resourceName = title.get(language) ?: "",
                 ),
