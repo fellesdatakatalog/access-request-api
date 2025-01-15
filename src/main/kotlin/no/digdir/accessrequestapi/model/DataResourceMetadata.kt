@@ -1,21 +1,25 @@
 package no.digdir.accessrequestapi.model
 
+import java.util.UUID
+
 @Deprecated("Use the result of https://github.com/Informasjonsforvaltning/applicationdcat-ap-no/issues/2 when it is ready")
-val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY = listOf(
-    "https://staging.fellesdatakatalog.digdir.no/data-services/ecdbd6d4-7026-3731-bd8e-2f15e26221a2",
-    "https://data.norge.no/data-services/031f7cea-4920-3cd4-8333-7f8992904aa5"
-)
+val HARD_CODED_RESOURCE_ID_IS_ORG_ONLY =
+    listOf(
+        "https://staging.fellesdatakatalog.digdir.no/data-services/ecdbd6d4-7026-3731-bd8e-2f15e26221a2",
+        "https://data.norge.no/data-services/031f7cea-4920-3cd4-8333-7f8992904aa5",
+    )
 
 data class DataResourceMetadata(
     val accessRequestUrl: String?,
     val contactPoint: List<ContactPoint>?,
     val title: LocalizedStrings,
     val publisher: Publisher,
-    val identifier: Array<String>?,
+    val id: UUID,
+    val uri: String,
     val accessRights: AccessRights?,
     val description: LocalizedStrings?,
     val distribution: List<Any>?,
-    val type: String,
+    val type: DataResourceType,
 ) {
     data class ContactPoint(
         val email: String,
@@ -46,25 +50,40 @@ data class DataResourceMetadata(
     )
 
     fun toShoppingCart(
-        resourceId: String,
+        urlToResource: String,
         language: DatasetLanguage,
     ): ShoppingCart =
         ShoppingCart(
             orgnr = publisher.id,
             hintIsPublic = accessRights?.code == AccessRight.PUBLIC,
-            hintIsOrg = resourceId in HARD_CODED_RESOURCE_ID_IS_ORG_ONLY,
+            hintIsOrg = urlToResource in HARD_CODED_RESOURCE_ID_IS_ORG_ONLY,
             hintIsPrePublicationData = isDatasetWithoutDistribution(),
             dataDef =
                 ShoppingCart.DataDef(
-                    identifier = identifier?.firstOrNull(),
-                    resourceId = resourceId,
+                    urlToResource = urlToResource,
+                    type = type,
+                    id = id,
+                    uri = uri,
                     orgnr = publisher.id,
                     resourceName = title.get(language) ?: "",
                 ),
             language = language,
         )
 
-    fun isDatasetWithoutDistribution() = type == "datasets" && distribution.isNullOrEmpty()
+    fun isDatasetWithoutDistribution() = type == DataResourceType.datasets && distribution.isNullOrEmpty()
+}
+
+enum class DataResourceType {
+    datasets,
+    dataservices,
+
+    ;
+
+    fun toUrlString() =
+        when (this) {
+            datasets -> "datasets"
+            dataservices -> "data-services"
+        }
 }
 
 enum class AccessRight {

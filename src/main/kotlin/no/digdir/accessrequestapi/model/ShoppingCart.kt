@@ -1,5 +1,7 @@
 package no.digdir.accessrequestapi.model
 
+import java.util.UUID
+
 data class ShoppingCart(
     val orgnr: String,
     val language: DatasetLanguage,
@@ -11,10 +13,12 @@ data class ShoppingCart(
     val system: String = "datanorge"
 
     data class DataDef(
-        val identifier: String?,
-        val resourceId: String,
+        val urlToResource: String,
+        val id: UUID,
+        val type: DataResourceType,
         val orgnr: String,
         val resourceName: String,
+        val uri: String,
     )
 }
 

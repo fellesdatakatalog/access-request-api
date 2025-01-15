@@ -43,7 +43,7 @@ class AccessRequestController(
         val metadata = felleskatalogClient.getMetadata(type, id) ?: return ResponseEntity.notFound().build()
 
         val shoppingCart =
-            metadata.toShoppingCart(resourceId = "${fdkUrls.frontend}/$type/$id", language = language)
+            metadata.toShoppingCart(urlToResource = "${fdkUrls.frontend}/$type/$id", language = language)
 
         val redirectUrl = kudafClient.getRedirectUrl(shoppingCart) ?: return ResponseEntity.notFound().build()
 
