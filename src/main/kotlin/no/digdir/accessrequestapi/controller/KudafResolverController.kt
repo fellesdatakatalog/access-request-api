@@ -3,8 +3,8 @@ package no.digdir.accessrequestapi.controller
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.digdir.accessrequestapi.client.FelleskatalogClient
 import no.digdir.accessrequestapi.configuration.FdkUrls
-import no.digdir.accessrequestapi.model.DatasetLanguage
 import no.digdir.accessrequestapi.model.DataResourceMetadata
+import no.digdir.accessrequestapi.model.DatasetLanguage
 import no.digdir.accessrequestapi.model.ShoppingCart
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -40,19 +40,11 @@ class KudafResolverController(
     ): ResponseEntity<ResolveDataDefResponse> {
         logger.info("Received request to resolve data definition for resource: $dataDef")
 
-        val uriReversed =
-            java.net
-                .URI(dataDef.resourceId)
-                .path
-                .split("/")
-                .filter { it.isNotEmpty() }
-                .asReversed()
-
-        val resourceId: UUID = UUID.fromString(uriReversed[0])
-        val resourceType = uriReversed[1]
+        val resourceId: UUID = dataDef.id
+        val resourceType = dataDef.type
 
         val metadata =
-            felleskatalogClient.getMetadata(resourceType, resourceId) ?: return ResponseEntity.notFound().build()
+            felleskatalogClient.getMetadata(resourceType.toUrlString(), resourceId) ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(
             ResolveDataDefResponse(
@@ -69,7 +61,7 @@ data class ResolveDataDefResponse(
     val description: String?,
     val urlToResource: String?,
     val hintIsPrePublicationData: Boolean,
-    ) {
+) {
     constructor(metadata: DataResourceMetadata, language: DatasetLanguage, urlToResource: String?) : this(
         title = metadata.title.get(language),
         description = metadata.description?.get(language),
