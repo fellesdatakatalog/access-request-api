@@ -57,12 +57,14 @@ class KudafResolverController(
 }
 
 data class ResolveDataDefResponse(
+    val dataResourceId: UUID,
     val title: String?,
     val description: String?,
     val urlToResource: String?,
     val hintIsPrePublicationData: Boolean,
 ) {
     constructor(metadata: DataResourceMetadata, language: DatasetLanguage, urlToResource: String?) : this(
+        dataResourceId = metadata.id,
         title = metadata.title.get(language),
         description = metadata.description?.get(language),
         urlToResource = urlToResource,
