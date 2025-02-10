@@ -10,7 +10,7 @@ jobs:
   dependabot-build:
     name: Build when dependabot pull request is created
     if: ${{ github.actor == 'dependabot[bot]' && github.event.pull_request.draft == false }}
-    uses: Informasjonsforvaltning/workflows/.github/workflows/build-push.yaml@main
+    uses: Informasjonsforvaltning/workflows/.github/workflows/build.yaml@main
     with:
       java_version: '21'
 
