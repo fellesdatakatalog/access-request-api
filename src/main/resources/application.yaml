@@ -22,7 +22,7 @@ url:
     api: ${RESOURCE_SERVICE_URI}
     frontend: ${FDK_URI}
   kudaf:
-    soknadApi: https://frontend-soknad-api.paas2.uninett.no
+    soknadApi: ${KUDAF_FRONTEND_SOKNAD_API:https://frontend-soknad-api.paas2.uninett.no}
 
 application:
   cors:
