@@ -1,32 +1,31 @@
 package no.digdir.accessrequestapi.integration
 
-import no.digdir.accessrequestapi.utils.ApiTestContext
-import no.digdir.accessrequestapi.utils.apiGet
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpStatus
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest(
-    properties = ["spring.profiles.active=test"],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-)
-@ContextConfiguration()
 @Tag("integration")
-class StatusTest : ApiTestContext() {
+@ActiveProfiles("test")
+
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class StatusTest {
+
+    @Autowired
+    private lateinit var mockMvc: MockMvc
+
     @Test
-    fun ping() {
-        val response = apiGet(port, "/ping", null)
-        assertEquals(HttpStatus.OK.value(), response["status"])
+    fun `ping request returns OK`() {
+        mockMvc.get("/ping").andExpect { status { isOk() } }
     }
 
     @Test
-    fun ready() {
-        val response = apiGet(port, "/ready", null)
-        assertEquals(HttpStatus.OK.value(), response["status"])
+    fun `ready request returns OK`() {
+        mockMvc.get("/ready").andExpect { status { isOk() } }
     }
 }

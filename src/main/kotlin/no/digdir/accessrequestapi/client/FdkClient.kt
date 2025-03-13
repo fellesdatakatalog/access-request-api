@@ -2,20 +2,19 @@ package no.digdir.accessrequestapi.client
 
 import no.digdir.accessrequestapi.configuration.FdkUrls
 import no.digdir.accessrequestapi.model.DataResourceMetadata
+import org.slf4j.Logger
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.util.retry.Retry
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 
 @Component
-class FelleskatalogClient(
-    fdkUrls: FdkUrls,
-) {
-    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
-
-    val webClient = WebClient.create(fdkUrls.api)
+class FdkClient(fdkUrls: FdkUrls) {
+    private val logger: Logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+    private val webClient: WebClient = WebClient.create(fdkUrls.api)
 
     fun getMetadata(
         type: String,
@@ -32,6 +31,7 @@ class FelleskatalogClient(
                 .retryWhen(
                     Retry
                         .backoff(3, Duration.ofMillis(500))
+                        .filter { throwable -> throwable !is WebClientResponseException.NotFound }
                         .doBeforeRetry { logger.info("Retrying due to: ${it.failure().message}", it.failure()) },
                 ).block()
 

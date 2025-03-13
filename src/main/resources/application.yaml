@@ -46,3 +46,10 @@ application:
 ---
 spring:
   config.activate.on-profile: test
+
+url:
+  fellesdatakatalog:
+    api: "http://localhost:6000"
+    frontend: "http://localhost:6000"
+  kudaf:
+    soknadApi: "http://localhost:6000"
